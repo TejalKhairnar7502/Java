@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+public class TimeConversion {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter time in 12-hour format (hh:mm:ss AM/PM): ");
+        String time12Hour = scanner.nextLine();
+
+        try {
+            String time24Hour = convertTo24HourFormat(time12Hour);
+            System.out.println("Equivalent military time: " + time24Hour);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        scanner.close();
+    }
+
+    private static String convertTo24HourFormat(String time12Hour) {
+        String[] parts = time12Hour.split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1].substring(0, 2));
+        String amPm = parts[1].substring(2).trim();
+
+        if (amPm.equalsIgnoreCase("PM") && hours != 12) {
+            hours += 12;
+        } else if (amPm.equalsIgnoreCase("AM") && hours == 12) {
+            hours = 0;
+        }
+
+        return String.format("%02d:%02d:%02d", hours, minutes, Integer.parseInt(parts[2].substring(0, 2)));
+    }
+}
